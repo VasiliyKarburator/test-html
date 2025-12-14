@@ -1,0 +1,2298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Заработок на заданиях</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --gray: #95a5a6;
+            --white: #ffffff;
+            --black: #1a1a2e;
+            --background: #0f172a;
+            --card-bg: #1e293b;
+            --border: #334155;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--white);
+            min-height: 100vh;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            padding: 25px 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00dbde, #fc00ff);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .user-avatar {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .user-details h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        .user-details p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        /* Balance Card */
+        .balance-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .balance-label {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .balance-amount {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--white);
+            margin-bottom: 5px;
+        }
+
+        .balance-subtitle {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .stat-icon {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* Navigation Grid */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .nav-item {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px 15px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--white);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px var(--shadow);
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .nav-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .nav-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Tasks */
+        .task-list {
+            margin-bottom: 20px;
+        }
+
+        .task-item {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+            position: relative;
+            border: 1px solid var(--border);
+        }
+
+        .task-reward {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .task-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--white);
+            padding-right: 70px;
+        }
+
+        .task-description {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+
+        .btn-icon {
+            font-size: 18px;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--gray);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--white);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: var(--gray);
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper select {
+            appearance: none;
+            padding-right: 40px;
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--primary);
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary);
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            padding: 10px 0;
+            font-weight: 500;
+        }
+
+        .back-btn i {
+            margin-right: 8px;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 10px 30px var(--shadow);
+            z-index: 1000;
+            display: none;
+            max-width: 350px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.success {
+            border-left-color: var(--success);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger);
+        }
+
+        .notification.warning {
+            border-left-color: var(--warning);
+        }
+
+        /* Loader */
+        .loader {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(67, 97, 238, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        /* Referral */
+        .referral-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .referral-link {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            word-break: break-all;
+            font-size: 14px;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        .qr-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 15px;
+        }
+
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            margin: 0 auto 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+
+        /* Withdrawal */
+        .withdrawal-summary {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        /* Support */
+        .ticket-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--warning);
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .ticket-id {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .ticket-status {
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-open {
+            background: rgba(243, 156, 18, 0.2);
+            color: var(--warning);
+        }
+
+        .status-answered {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+        }
+
+        .status-closed {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+        }
+
+        /* Profile */
+        .profile-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            color: var(--gray);
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .empty-icon {
+            font-size: 60px;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .empty-text {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .balance-amount {
+                font-size: 32px;
+            }
+            
+            .nav-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .quick-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            
+            .stat-item {
+                padding: 12px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 750px;
+            }
+            
+            .nav-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Task Categories */
+        .categories {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .category {
+            padding: 10px 20px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            white-space: nowrap;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .category.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .category:hover {
+            border-color: var(--primary);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--card-bg);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Screen -->
+    <div class="container" id="mainScreen">
+        <!-- Header -->
+        <div class="header">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <h2 id="userName">Загрузка...</h2>
+                    <p id="userUsername">@username</p>
+                </div>
+            </div>
+            
+            <div class="balance-card" style="background: rgba(255, 255, 255, 0.1);">
+                <div class="balance-label">Ваш баланс</div>
+                <div class="balance-amount" id="balance">0.00 ₽</div>
+                <div class="balance-subtitle">Доступно для вывода</div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-tasks"></i></div>
+                <div class="stat-value" id="completedTasks">0</div>
+                <div class="stat-label">Заданий</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-value" id="referralsCount">0</div>
+                <div class="stat-label">Рефералов</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="stat-value" id="refEarnings">0</div>
+                <div class="stat-label">С рефералов</div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-grid">
+            <div class="nav-item" onclick="showSection('earn')">
+                <div class="nav-icon"><i class="fas fa-briefcase"></i></div>
+                <div class="nav-label">Заработать</div>
+            </div>
+            <div class="nav-item" onclick="showSection('referrals')">
+                <div class="nav-icon"><i class="fas fa-users"></i></div>
+                <div class="nav-label">Рефералы</div>
+            </div>
+            <div class="nav-item" onclick="showSection('withdraw')">
+                <div class="nav-icon"><i class="fas fa-wallet"></i></div>
+                <div class="nav-label">Вывод</div>
+            </div>
+            <div class="nav-item" onclick="showSection('profile')">
+                <div class="nav-icon"><i class="fas fa-user-circle"></i></div>
+                <div class="nav-label">Профиль</div>
+            </div>
+            <div class="nav-item" onclick="showSection('support')">
+                <div class="nav-icon"><i class="fas fa-headset"></i></div>
+                <div class="nav-label">Поддержка</div>
+            </div>
+            <div class="nav-item" onclick="showSection('myTasks')">
+                <div class="nav-icon"><i class="fas fa-clipboard-list"></i></div>
+                <div class="nav-label">Мои задания</div>
+            </div>
+            <div class="nav-item" onclick="openBot()">
+                <div class="nav-icon"><i class="fab fa-telegram"></i></div>
+                <div class="nav-label">Открыть бота</div>
+            </div>
+            <div class="nav-item" onclick="copyUserId()">
+                <div class="nav-icon"><i class="fas fa-id-card"></i></div>
+                <div class="nav-label">Мой ID</div>
+            </div>
+        </div>
+
+        <!-- Active Tasks -->
+        <div class="balance-card">
+            <div class="form-label" style="margin-bottom: 15px;">
+                <i class="fas fa-bolt" style="color: var(--warning); margin-right: 8px;"></i>
+                Активные задания
+            </div>
+            <div id="activeTasksList">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px;">
+            <button class="btn btn-secondary" onclick="refreshData()">
+                <i class="fas fa-sync-alt"></i> Обновить
+            </button>
+            <button class="btn btn-secondary" onclick="showHelp()">
+                <i class="fas fa-question-circle"></i> Помощь
+            </button>
+        </div>
+    </div>
+
+    <!-- Earn Money Section -->
+    <div class="container section" id="earnSection">
+        <button class="back-btn" onclick="showSection('main')">
+            <i class="fas fa-arrow-left"></i> Назад
+        </button>
+        
+        <h2 style="margin-bottom: 20px; color: var(--primary);">
+            <i class="fas fa-briefcase"></i> Заработать деньги
+        </h2>
+
+        <!-- Task Categories -->
+        <div class="categories" id="taskCategories">
+            <div class="category active" onclick="filterTasks('all')">Все</div>
+            <div class="category" onclick="filterTasks('high')">Высокий доход</div>
+            <div class="category" onclick="filterTasks('quick')">Быстрые</div>
+            <div class="category" onclick="filterTasks('new')">Новые</div>
+        </div>
+
+        <!-- Tasks List -->
+        <div id="tasksList" class="task-list">
+            <!-- Will be populated by JavaScript -->
+        </div>
+
+        <div class="loader-container" id="tasksLoader" style="display: none;">
+            <div class="loader"></div>
+        </div>
+
+        <div class="empty-state" id="noTasks" style="display: none;">
+            <div class="empty-icon">
+                <i class="fas fa-clipboard"></i>
+            </div>
+            <div class="empty-text">
+                <h3>Нет доступных заданий</h3>
+                <p>Загляните позже, новые задания появляются регулярно</p>
+            </div>
+            <button class="btn" onclick="refreshTasks()">
+                <i class="fas fa-sync-alt"></i> Обновить
+            </button>
+        </div>
+    </div>
+
+    <!-- Referrals Section -->
+    <div class="container section" id="referralsSection">
+        <button class="back-btn" onclick="showSection('main')">
+            <i class="fas fa-arrow-left"></i> Назад
+        </button>
+        
+        <h2 style="margin-bottom: 20px; color: var(--primary);">
+            <i class="fas fa-users"></i> Реферальная система
+        </h2>
+
+        <!-- Referral Stats -->
+        <div class="quick-stats" style="margin-bottom: 20px;">
+            <div class="stat-item">
+                <div class="stat-value" id="totalReferrals">0</div>
+                <div class="stat-label">Всего</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="activeReferrals">0</div>
+                <div class="stat-label">Активных</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalRefEarnings">0 ₽</div>
+                <div class="stat-label">Заработано</div>
+            </div>
+        </div>
+
+        <!-- Referral Card -->
+        <div class="referral-card">
+            <h3 style="margin-bottom: 15px;"><i class="fas fa-link"></i> Ваша реферальная ссылка</h3>
+            <div class="referral-link" id="refLink">
+                Загрузка...
+            </div>
+            <p style="margin-bottom: 20px; opacity: 0.9;">
+                Приглашайте друзей и получайте до 10% от их заработка!
+            </p>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" onclick="copyRefLink()" style="flex: 1;">
+                    <i class="fas fa-copy"></i> Копировать
+                </button>
+                <button class="btn btn-secondary" onclick="shareRefLink()" style="flex: 1;">
+                    <i class="fas fa-share-alt"></i> Поделиться
+                </button>
+            </div>
+        </div>
+
+        <!-- QR Code -->
+        <div class="qr-container">
+            <div class="qr-placeholder">
+                <i class="fas fa-qrcode"></i>
+            </div>
+            <p>Наведите камеру на QR-код для быстрой регистрации</p>
+        </div>
+
+        <!-- Referral Info -->
+        <div class="balance-card">
+            <h4 style="margin-bottom: 15px; color: var(--primary);">
+                <i class="fas fa-info-circle"></i> Как это работает
+            </h4>
+            <div style="line-height: 1.6;">
+                <p>🎯 <strong>1 уровень:</strong> 5% от заработка каждого реферала</p>
+                <p>🎯 <strong>2 уровень:</strong> 3% от заработка рефералов 2-го уровня</p>
+                <p>🎯 <strong>3 уровень:</strong> 1% от заработка рефералов 3-го уровня</p>
+                <p style="margin-top: 15px; color: var(--success);">
+                    <i class="fas fa-gift"></i> Деньги начисляются автоматически!
+                </p>
+            </div>
+        </div>
+
+        <!-- Top Referrals -->
+        <div class="balance-card" id="topReferralsContainer" style="display: none;">
+            <h4 style="margin-bottom: 15px; color: var(--primary);">
+                <i class="fas fa-trophy"></i> Топ рефералов
+            </h4>
+            <div id="topReferralsList">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Section -->
+    <div class="container section" id="withdrawSection">
+        <button class="back-btn" onclick="showSection('main')">
+            <i class="fas fa-arrow-left"></i> Назад
+        </button>
+        
+        <h2 style="margin-bottom: 20px; color: var(--primary);">
+            <i class="fas fa-wallet"></i> Вывод средств
+        </h2>
+
+        <!-- Balance Info -->
+        <div class="balance-card" style="text-align: center;">
+            <div class="balance-label">Доступно для вывода</div>
+            <div class="balance-amount" id="withdrawBalance">0.00 ₽</div>
+            <div class="balance-subtitle">Минимум: <span id="minWithdraw">100</span> ₽</div>
+        </div>
+
+        <!-- Withdrawal Form -->
+        <div class="withdrawal-form">
+            <div class="form-group">
+                <label class="form-label">Сумма вывода</label>
+                <input type="number" class="form-control" id="withdrawAmount" 
+                       placeholder="Введите сумму" min="100" step="10">
+                <div style="font-size: 12px; color: var(--gray); margin-top: 5px;">
+                    Введите сумму от 100 ₽
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Способ получения</label>
+                <div class="select-wrapper">
+                    <select class="form-control" id="withdrawMethod">
+                        <option value="card">💳 Банковская карта</option>
+                        <option value="phone">📱 Номер телефона</option>
+                        <option value="qiwi">🟣 QIWI кошелек</option>
+                        <option value="yoomoney">🟢 ЮMoney</option>
+                    </select>
+                    <div class="select-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" id="detailsLabel">Номер карты</label>
+                <input type="text" class="form-control" id="withdrawDetails" 
+                       placeholder="2200 1234 5678 9012">
+                <div style="font-size: 12px; color: var(--gray); margin-top: 5px;" id="detailsHint">
+                    Введите 16 цифр номера карты
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="withdrawal-summary">
+                <div class="summary-row">
+                    <span>Сумма вывода:</span>
+                    <span id="summaryAmount">0 ₽</span>
+                </div>
+                <div class="summary-row">
+                    <span>Комиссия:</span>
+                    <span id="summaryFee">0 ₽ (0%)</span>
+                </div>
+                <div class="summary-row" style="font-weight: bold; color: var(--primary);">
+                    <span>К получению:</span>
+                    <span id="summaryTotal">0 ₽</span>
+                </div>
+            </div>
+
+            <button class="btn" onclick="submitWithdrawal()" id="submitWithdrawBtn">
+                <i class="fas fa-paper-plane"></i> Отправить заявку
+            </button>
+            <button class="btn btn-secondary" onclick="showSection('main')" style="margin-top: 10px;">
+                <i class="fas fa-times"></i> Отмена
+            </button>
+        </div>
+
+        <!-- Withdrawal History -->
+        <div class="balance-card" style="margin-top: 30px;">
+            <h4 style="margin-bottom: 15px; color: var(--primary);">
+                <i class="fas fa-history"></i> История выводов
+            </h4>
+            <div id="withdrawalHistory">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            <div class="empty-state" id="noWithdrawals" style="padding: 20px;">
+                <div class="empty-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <div class="empty-text">
+                    <p>У вас еще нет выводов</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="container section" id="profileSection">
+        <button class="back-btn" onclick="showSection('main')">
+            <i class="fas fa-arrow-left"></i> Назад
+        </button>
+        
+        <h2 style="margin-bottom: 20px; color: var(--primary);">
+            <i class="fas fa-user-circle"></i> Мой профиль
+        </h2>
+
+        <!-- Profile Card -->
+        <div class="profile-section">
+            <div class="profile-info">
+                <div class="info-label">ID пользователя</div>
+                <div class="info-value" id="profileUserId">000000</div>
+            </div>
+            
+            <div class="profile-info">
+                <div class="info-label">Имя</div>
+                <div class="info-value" id="profileName">Пользователь</div>
+            </div>
+            
+            <div class="profile-info">
+                <div class="info-label">Дата регистрации</div>
+                <div class="info-value" id="profileRegDate">01.01.2024</div>
+            </div>
+            
+            <div class="profile-info">
+                <div class="info-label">Последняя активность</div>
+                <div class="info-value" id="profileLastActive">Сегодня</div>
+            </div>
+        </div>
+
+        <!-- Detailed Stats -->
+        <div class="quick-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="profileBalance">0 ₽</div>
+                <div class="stat-label">Баланс</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="profileTotalEarned">0 ₽</div>
+                <div class="stat-label">Заработано</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="profileTotalWithdrawn">0 ₽</div>
+                <div class="stat-label">Выведено</div>
+            </div>
+        </div>
+
+        <!-- Tasks Stats -->
+        <div class="balance-card">
+            <h4 style="margin-bottom: 15px; color: var(--primary);">
+                <i class="fas fa-chart-bar"></i> Статистика заданий
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                <div class="stat-item" style="padding: 10px;">
+                    <div class="stat-value" id="tasksApproved">0</div>
+                    <div class="stat-label">Одобрено</div>
+                </div>
+                <div class="stat-item" style="padding: 10px;">
+                    <div class="stat-value" id="tasksPending">0</div>
+                    <div class="stat-label">На проверке</div>
+                </div>
+                <div class="stat-item" style="padding: 10px;">
+                    <div class="stat-value" id="tasksCompleted">0</div>
+                    <div class="stat-label">Выполнено</div>
+                </div>
+                <div class="stat-item" style="padding: 10px;">
+                    <div class="stat-value" id="tasksRejected">0</div>
+                    <div class="stat-label">Отклонено</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px;">
+            <button class="btn btn-secondary" onclick="refreshProfile()">
+                <i class="fas fa-sync-alt"></i> Обновить
+            </button>
+            <button class="btn btn-secondary" onclick="copyUserId()">
+                <i class="fas fa-id-card"></i> Скопировать ID
+            </button>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="balance-card" style="border-color: var(--danger); margin-top: 30px;">
+            <h4 style="margin-bottom: 15px; color: var(--danger);">
+                <i class="fas fa-exclamation-triangle"></i> Опасная зона
+            </h4>
+            <p style="margin-bottom: 15px; color: var(--gray); font-size: 14px;">
+                Эти действия нельзя отменить
+            </p>
+            <button class="btn" style="background: var(--danger);" onclick="showClearHistoryModal()">
+                <i class="fas fa-trash"></i> Очистить историю
+            </button>
+        </div>
+    </div>
+
+    <!-- Support Section -->
+    <div class="container section" id="supportSection">
+        <button class="back-btn" onclick="showSection('main')">
+            <i class="fas fa-arrow-left"></i> Назад
+        </button>
+        
+        <h2 style="margin-bottom: 20px; color: var(--primary);">
+            <i class="fas fa-headset"></i> Поддержка
+        </h2>
+
+        <!-- Create Ticket -->
+        <div class="balance-card">
+            <h4 style="margin-bottom: 15px; color: var(--primary);">
+                <i class="fas fa-plus-circle"></i> Создать обращение
+            </h4>
+            
+            <div class="form-group">
+                <label class="form-label">Тема обращения</label>
+                <input type="text" class="form-control" id="supportSubject" 
+                       placeholder="Например: Проблема с выводом">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Сообщение</label>
+                <textarea class="form-control" id="supportMessage" rows="4" 
+                          placeholder="Подробно опишите вашу проблему..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Категория</label>
+                <div class="select-wrapper">
+                    <select class="form-control" id="supportCategory">
+                        <option value="withdraw">💰 Вывод средств</option>
+                        <option value="tasks">💼 Задания</option>
+                        <option value="technical">🔧 Технические проблемы</option>
+                        <option value="other">❓ Другое</option>
+                    </select>
+                    <div class="select-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="submitSupportTicket()">
+                <i class="fas fa-paper-plane"></i> Отправить обращение
+            </button>
+        </div>
+
+        <!-- My Tickets -->
+        <div class="balance-card" style="margin-top: 20px;">
+            <h4 style="margin-bottom: 15px; color: var(--primary);">
+                <i class="fas fa-ticket-alt"></i> Мои обращения
+            </h4>
+            <div id="ticketsList">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            <div class="empty-state" id="noTickets" style="padding: 20px;">
+                <div class="empty-icon">
+                    <i class="fas fa-inbox"></i>
+                </div>
+                <div class="empty-text">
+                    <p>У вас пока нет обращений</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="balance-card" style="margin-top: 20px;">
+            <h4 style="margin-bottom: 15px; color: var(--primary);">
+                <i class="fas fa-question-circle"></i> Частые вопросы
+            </h4>
+            <div style="line-height: 1.6;">
+                <p><strong>❓ Сколько времени занимает вывод?</strong><br>
+                Обычно 1-3 рабочих дня после одобрения заявки.</p>
+                
+                <p><strong>❓ Почему отклонили задание?</strong><br>
+                Проверьте соответствие требованиям и качество скриншотов.</p>
+                
+                <p><strong>❓ Как пригласить друга?</strong><br>
+                Поделитесь своей реферальной ссылкой из раздела "Рефералы".</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Tasks Section -->
+    <div class="container section" id="myTasksSection">
+        <button class="back-btn" onclick="showSection('main')">
+            <i class="fas fa-arrow-left"></i> Назад
+        </button>
+        
+        <h2 style="margin-bottom: 20px; color: var(--primary);">
+            <i class="fas fa-clipboard-list"></i> Мои задания
+        </h2>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="filterMyTasks('all')">Все</div>
+            <div class="tab" onclick="filterMyTasks('pending')">В процессе</div>
+            <div class="tab" onclick="filterMyTasks('completed')">На проверке</div>
+            <div class="tab" onclick="filterMyTasks('approved')">Одобрено</div>
+            <div class="tab" onclick="filterMyTasks('rejected')">Отклонено</div>
+        </div>
+
+        <!-- Tasks List -->
+        <div id="myTasksList" class="task-list">
+            <!-- Will be populated by JavaScript -->
+        </div>
+
+        <div class="loader-container" id="myTasksLoader" style="display: none;">
+            <div class="loader"></div>
+        </div>
+
+        <div class="empty-state" id="noMyTasks" style="display: none;">
+            <div class="empty-icon">
+                <i class="fas fa-clipboard-check"></i>
+            </div>
+            <div class="empty-text">
+                <h3>Заданий нет</h3>
+                <p>Начните выполнять задания, чтобы заработать деньги</p>
+            </div>
+            <button class="btn" onclick="showSection('earn')">
+                <i class="fas fa-briefcase"></i> Найти задания
+            </button>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="helpModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-question-circle"></i> Помощь
+                </div>
+                <button class="modal-close" onclick="hideHelp()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div style="line-height: 1.6;">
+                <p><strong>💰 Как заработать?</strong><br>
+                1. Выберите задание в разделе "Заработать"<br>
+                2. Выполните требования задания<br>
+                3. Загрузите скриншот подтверждения<br>
+                4. Получите оплату после проверки</p>
+                
+                <p><strong>👥 Как работают рефералы?</strong><br>
+                Приглашайте друзей по своей ссылке и получайте процент от их заработка. Система работает до 3 уровней.</p>
+                
+                <p><strong>💸 Как вывести деньги?</strong><br>
+                Минимальная сумма вывода: 100 ₽. Выберите удобный способ получения и отправьте заявку.</p>
+                
+                <p><strong>🆘 Нужна помощь?</strong><br>
+                Создайте обращение в разделе "Поддержка". Мы ответим в течение 24 часов.</p>
+            </div>
+            <button class="btn" onclick="hideHelp()" style="margin-top: 20px;">
+                <i class="fas fa-check"></i> Понятно
+            </button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="clearHistoryModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" style="color: var(--danger);">
+                    <i class="fas fa-exclamation-triangle"></i> Очистка истории
+                </div>
+                <button class="modal-close" onclick="hideClearHistoryModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div style="line-height: 1.6; margin-bottom: 20px;">
+                <p>Вы уверены, что хотите очистить историю заданий?</p>
+                <p style="color: var(--danger); font-weight: bold;">
+                    Это действие нельзя отменить! Статистика будет потеряна.
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" onclick="hideClearHistoryModal()" style="flex: 1;">
+                    <i class="fas fa-times"></i> Отмена
+                </button>
+                <button class="btn" onclick="clearHistory()" style="flex: 1; background: var(--danger);">
+                    <i class="fas fa-trash"></i> Очистить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Loader -->
+    <div class="modal-overlay" id="globalLoader" style="display: flex; background: rgba(15, 23, 42, 0.95);">
+        <div style="text-align: center;">
+            <div class="loader"></div>
+            <div style="margin-top: 20px; color: var(--white);">Загрузка...</div>
+        </div>
+    </div>
+
+    <script>
+        // Telegram Web App
+        let tg = window.Telegram.WebApp;
+        let userData = null;
+        let appData = {
+            settings: {},
+            tasks: [],
+            myTasks: [],
+            referrals: [],
+            tickets: [],
+            withdrawals: []
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            tg.expand();
+            tg.MainButton.hide();
+            tg.BackButton.hide();
+            
+            // Show loader
+            document.getElementById('globalLoader').style.display = 'flex';
+            
+            // Load data after a short delay
+            setTimeout(() => {
+                initializeApp();
+            }, 1000);
+        });
+
+        // Back button handler
+        tg.BackButton.onClick(() => {
+            if (!document.getElementById('mainScreen').style.display ||
+                document.getElementById('mainScreen').style.display === 'none') {
+                showSection('main');
+                tg.BackButton.hide();
+            }
+        });
+
+        // Initialize app
+        async function initializeApp() {
+            try {
+                // Get URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const token = urlParams.get('token');
+                const userId = urlParams.get('user_id');
+                
+                if (!token || !userId) {
+                    showNotification('Ошибка авторизации. Пожалуйста, откройте приложение через бота.', 'error');
+                    setTimeout(() => {
+                        tg.close();
+                    }, 3000);
+                    return;
+                }
+                
+                // Load user data
+                userData = await loadUserData(userId, token);
+                if (!userData) {
+                    throw new Error('Failed to load user data');
+                }
+                
+                // Load app data
+                await Promise.all([
+                    loadTasks(),
+                    loadMyTasks(),
+                    loadReferralStats(),
+                    loadTickets(),
+                    loadWithdrawals()
+                ]);
+                
+                // Update UI
+                updateMainScreen();
+                
+                // Hide loader
+                document.getElementById('globalLoader').style.display = 'none';
+                
+                // Show welcome notification
+                showNotification(`Добро пожаловать, ${userData.name}!`, 'success');
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showNotification('Ошибка загрузки данных. Попробуйте позже.', 'error');
+                document.getElementById('globalLoader').style.display = 'none';
+            }
+        }
+
+        // Load user data
+        async function loadUserData(userId, token) {
+            // Mock data - replace with real API call
+            return {
+                id: userId,
+                name: tg.initDataUnsafe.user?.first_name || 'Пользователь',
+                username: tg.initDataUnsafe.user?.username || 'user',
+                balance: 1500.50,
+                total_earned: 2500.75,
+                total_withdrawn: 1000.25,
+                registration_date: '2024-01-15',
+                last_active: 'Сегодня',
+                completed_tasks: 12,
+                referrals_count: 5,
+                ref_earnings: 250.75
+            };
+        }
+
+        // Load tasks
+        async function loadTasks() {
+            // Mock data - replace with real API call
+            appData.tasks = [
+                {
+                    id: 1,
+                    title: 'Отзыв на маркетплейс',
+                    description: 'Оставьте развернутый отзыв на Wildberries с фотографиями товара',
+                    reward: 150,
+                    category: 'high',
+                    new: true
+                },
+                {
+                    id: 2,
+                    title: 'Комментарий в соцсети',
+                    description: 'Напишите содержательный комментарий в группе ВКонтакте',
+                    reward: 75,
+                    category: 'quick'
+                },
+                {
+                    id: 3,
+                    title: 'Обзор приложения',
+                    description: 'Снимите видео-обзор нашего приложения длительностью 2-3 минуты',
+                    reward: 300,
+                    category: 'high'
+                },
+                {
+                    id: 4,
+                    title: 'Опрос пользователей',
+                    description: 'Пройдите опрос из 10 вопросов о качестве сервиса',
+                    reward: 50,
+                    category: 'quick'
+                }
+            ];
+        }
+
+        // Load my tasks
+        async function loadMyTasks() {
+            // Mock data - replace with real API call
+            appData.myTasks = [
+                {
+                    id: 1,
+                    task_id: 1,
+                    title: 'Отзыв на маркетплейс',
+                    reward: 150,
+                    status: 'approved',
+                    date: '2024-01-20',
+                    reviewed_by: 'Администратор'
+                },
+                {
+                    id: 2,
+                    task_id: 2,
+                    title: 'Комментарий в соцсети',
+                    reward: 75,
+                    status: 'pending',
+                    date: '2024-01-21'
+                },
+                {
+                    id: 3,
+                    task_id: 3,
+                    title: 'Обзор приложения',
+                    reward: 300,
+                    status: 'rejected',
+                    date: '2024-01-19',
+                    reason: 'Несоответствие требованиям'
+                }
+            ];
+        }
+
+        // Load referral stats
+        async function loadReferralStats() {
+            // Mock data - replace with real API call
+            appData.referrals = {
+                total: 5,
+                active: 3,
+                earnings: 250.75,
+                levels: {
+                    1: 3,
+                    2: 1,
+                    3: 1
+                },
+                top: [
+                    { username: 'user1', earnings: 100.50 },
+                    { username: 'user2', earnings: 75.25 },
+                    { username: 'user3', earnings: 50.00 }
+                ]
+            };
+        }
+
+        // Load tickets
+        async function loadTickets() {
+            // Mock data - replace with real API call
+            appData.tickets = [
+                {
+                    id: 123,
+                    subject: 'Проблема с выводом',
+                    message: 'Не пришли деньги на карту',
+                    status: 'answered',
+                    date: '2024-01-20'
+                },
+                {
+                    id: 124,
+                    subject: 'Вопрос по заданию',
+                    message: 'Как правильно сделать скриншот?',
+                    status: 'open',
+                    date: '2024-01-21'
+                }
+            ];
+        }
+
+        // Load withdrawals
+        async function loadWithdrawals() {
+            // Mock data - replace with real API call
+            appData.withdrawals = [
+                {
+                    id: 1,
+                    amount: 500,
+                    method: 'card',
+                    status: 'approved',
+                    date: '2024-01-18'
+                },
+                {
+                    id: 2,
+                    amount: 300,
+                    method: 'phone',
+                    status: 'pending',
+                    date: '2024-01-22'
+                }
+            ];
+        }
+
+        // Update main screen
+        function updateMainScreen() {
+            if (!userData) return;
+            
+            // User info
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('userUsername').textContent = '@' + userData.username;
+            
+            // Balance
+            document.getElementById('balance').textContent = userData.balance.toFixed(2) + ' ₽';
+            document.getElementById('withdrawBalance').textContent = userData.balance.toFixed(2) + ' ₽';
+            
+            // Stats
+            document.getElementById('completedTasks').textContent = userData.completed_tasks;
+            document.getElementById('referralsCount').textContent = userData.referrals_count;
+            document.getElementById('refEarnings').textContent = userData.ref_earnings.toFixed(2) + ' ₽';
+            
+            // Active tasks
+            updateActiveTasks();
+            
+            // Profile
+            updateProfile();
+            
+            // Referrals
+            updateReferrals();
+            
+            // Withdrawals
+            updateWithdrawals();
+            
+            // Tickets
+            updateTickets();
+        }
+
+        // Update active tasks
+        function updateActiveTasks() {
+            const activeTasks = appData.myTasks.filter(task => 
+                task.status === 'pending' || task.status === 'completed'
+            ).slice(0, 3);
+            
+            const container = document.getElementById('activeTasksList');
+            
+            if (activeTasks.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--gray);">
+                        <i class="fas fa-tasks" style="font-size: 24px; margin-bottom: 10px;"></i>
+                        <p>Нет активных заданий</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            activeTasks.forEach(task => {
+                const statusText = {
+                    'pending': 'В процессе',
+                    'completed': 'На проверке',
+                    'approved': 'Одобрено',
+                    'rejected': 'Отклонено'
+                }[task.status] || task.status;
+                
+                const statusColor = {
+                    'pending': 'var(--warning)',
+                    'completed': 'var(--info)',
+                    'approved': 'var(--success)',
+                    'rejected': 'var(--danger)'
+                }[task.status] || 'var(--gray)';
+                
+                html += `
+                    <div style="margin-bottom: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span style="font-weight: 500;">${task.title}</span>
+                            <span style="color: ${statusColor}; font-size: 12px;">${statusText}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--gray);">
+                            <span>${task.reward} ₽</span>
+                            <span>${task.date}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Update profile
+        function updateProfile() {
+            if (!userData) return;
+            
+            document.getElementById('profileUserId').textContent = userData.id;
+            document.getElementById('profileName').textContent = userData.name;
+            document.getElementById('profileRegDate').textContent = userData.registration_date;
+            document.getElementById('profileLastActive').textContent = userData.last_active;
+            
+            document.getElementById('profileBalance').textContent = userData.balance.toFixed(2) + ' ₽';
+            document.getElementById('profileTotalEarned').textContent = userData.total_earned.toFixed(2) + ' ₽';
+            document.getElementById('profileTotalWithdrawn').textContent = userData.total_withdrawn.toFixed(2) + ' ₽';
+            
+            // Tasks stats
+            const approved = appData.myTasks.filter(t => t.status === 'approved').length;
+            const pending = appData.myTasks.filter(t => t.status === 'pending').length;
+            const completed = appData.myTasks.filter(t => t.status === 'completed').length;
+            const rejected = appData.myTasks.filter(t => t.status === 'rejected').length;
+            
+            document.getElementById('tasksApproved').textContent = approved;
+            document.getElementById('tasksPending').textContent = pending;
+            document.getElementById('tasksCompleted').textContent = completed;
+            document.getElementById('tasksRejected').textContent = rejected;
+        }
+
+        // Update referrals
+        function updateReferrals() {
+            document.getElementById('totalReferrals').textContent = appData.referrals.total;
+            document.getElementById('activeReferrals').textContent = appData.referrals.active;
+            document.getElementById('totalRefEarnings').textContent = appData.referrals.earnings.toFixed(2) + ' ₽';
+            
+            // Referral link
+            document.getElementById('refLink').textContent = `https://t.me/${tg.initDataUnsafe.user?.username || 'bot'}_bot?start=${userData.id}`;
+            
+            // Top referrals
+            if (appData.referrals.top.length > 0) {
+                document.getElementById('topReferralsContainer').style.display = 'block';
+                let html = '';
+                appData.referrals.top.forEach((ref, index) => {
+                    html += `
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border);">
+                            <div>
+                                <span style="color: var(--primary); margin-right: 10px;">#${index + 1}</span>
+                                <span>${ref.username}</span>
+                            </div>
+                            <div style="color: var(--success); font-weight: 500;">
+                                ${ref.earnings.toFixed(2)} ₽
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('topReferralsList').innerHTML = html;
+            }
+        }
+
+        // Update withdrawals
+        function updateWithdrawals() {
+            const container = document.getElementById('withdrawalHistory');
+            
+            if (appData.withdrawals.length === 0) {
+                document.getElementById('noWithdrawals').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('noWithdrawals').style.display = 'none';
+            
+            let html = '';
+            appData.withdrawals.forEach(withdrawal => {
+                const statusText = {
+                    'pending': '⏳ Ожидание',
+                    'approved': '✅ Одобрено',
+                    'rejected': '❌ Отклонено'
+                }[withdrawal.status] || withdrawal.status;
+                
+                const statusColor = {
+                    'pending': 'var(--warning)',
+                    'approved': 'var(--success)',
+                    'rejected': 'var(--danger)'
+                }[withdrawal.status] || 'var(--gray)';
+                
+                const methodIcon = {
+                    'card': '💳',
+                    'phone': '📱',
+                    'qiwi': '🟣',
+                    'yoomoney': '🟢'
+                }[withdrawal.method] || '💰';
+                
+                html += `
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border);">
+                        <div>
+                            <div style="font-weight: 500;">${methodIcon} ${withdrawal.amount.toFixed(2)} ₽</div>
+                            <div style="font-size: 12px; color: var(--gray);">${withdrawal.date}</div>
+                        </div>
+                        <div style="color: ${statusColor}; font-weight: 500;">
+                            ${statusText}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Update tickets
+        function updateTickets() {
+            const container = document.getElementById('ticketsList');
+            
+            if (appData.tickets.length === 0) {
+                document.getElementById('noTickets').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('noTickets').style.display = 'none';
+            
+            let html = '';
+            appData.tickets.forEach(ticket => {
+                const statusClass = {
+                    'open': 'status-open',
+                    'answered': 'status-answered',
+                    'closed': 'status-closed'
+                }[ticket.status] || 'status-open';
+                
+                html += `
+                    <div class="ticket-item">
+                        <div class="ticket-header">
+                            <div class="ticket-id">#${ticket.id}</div>
+                            <div class="ticket-status ${statusClass}">
+                                ${ticket.status === 'open' ? 'Открыт' : 
+                                  ticket.status === 'answered' ? 'Отвечен' : 'Закрыт'}
+                            </div>
+                        </div>
+                        <div style="font-weight: 500; margin-bottom: 5px;">${ticket.subject}</div>
+                        <div style="color: var(--gray); font-size: 14px; margin-bottom: 10px;">
+                            ${ticket.message.substring(0, 100)}${ticket.message.length > 100 ? '...' : ''}
+                        </div>
+                        <div style="font-size: 12px; color: var(--gray);">${ticket.date}</div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Show section
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.container').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Hide main screen
+            document.getElementById('mainScreen').style.display = 'none';
+            
+            // Show selected section
+            document.getElementById(section + 'Section').style.display = 'block';
+            
+            // Show back button in Telegram
+            tg.BackButton.show();
+            
+            // Load section data
+            switch(section) {
+                case 'earn':
+                    showEarnSection();
+                    break;
+                case 'myTasks':
+                    showMyTasksSection();
+                    break;
+                case 'withdraw':
+                    updateWithdrawalForm();
+                    break;
+            }
+        }
+
+        // Show earn section
+        function showEarnSection() {
+            const container = document.getElementById('tasksList');
+            const loader = document.getElementById('tasksLoader');
+            const empty = document.getElementById('noTasks');
+            
+            loader.style.display = 'none';
+            empty.style.display = 'none';
+            
+            if (appData.tasks.length === 0) {
+                empty.style.display = 'block';
+                return;
+            }
+            
+            let html = '';
+            appData.tasks.forEach(task => {
+                const isNew = task.new ? '<span style="background: var(--success); color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin-left: 8px;">NEW</span>' : '';
+                
+                html += `
+                    <div class="task-item">
+                        <div class="task-reward">${task.reward} ₽</div>
+                        <div class="task-title">
+                            ${task.title}
+                            ${isNew}
+                        </div>
+                        <div class="task-description">${task.description}</div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-small" onclick="startTask(${task.id})">
+                                <i class="fas fa-play"></i> Начать
+                            </button>
+                            <button class="btn btn-small btn-secondary" onclick="viewTaskDetails(${task.id})">
+                                <i class="fas fa-info-circle"></i> Подробнее
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Show my tasks section
+        function showMyTasksSection() {
+            const container = document.getElementById('myTasksList');
+            const loader = document.getElementById('myTasksLoader');
+            const empty = document.getElementById('noMyTasks');
+            
+            loader.style.display = 'none';
+            
+            const tasks = appData.myTasks;
+            
+            if (tasks.length === 0) {
+                empty.style.display = 'block';
+                return;
+            }
+            
+            empty.style.display = 'none';
+            
+            let html = '';
+            tasks.forEach(task => {
+                const statusText = {
+                    'pending': 'В процессе',
+                    'completed': 'На проверке',
+                    'approved': 'Одобрено',
+                    'rejected': 'Отклонено'
+                }[task.status] || task.status;
+                
+                const statusColor = {
+                    'pending': 'var(--warning)',
+                    'completed': 'var(--info)',
+                    'approved': 'var(--success)',
+                    'rejected': 'var(--danger)'
+                }[task.status] || 'var(--gray)';
+                
+                html += `
+                    <div class="task-item">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div class="task-title">${task.title}</div>
+                            <div style="color: ${statusColor}; font-weight: bold;">${statusText}</div>
+                        </div>
+                        <div class="task-description">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>Награда: ${task.reward} ₽</span>
+                                <span>${task.date}</span>
+                            </div>
+                            ${task.reason ? `<div style="color: var(--danger); font-size: 13px;">Причина: ${task.reason}</div>` : ''}
+                            ${task.reviewed_by ? `<div style="color: var(--gray); font-size: 13px;">Проверил: ${task.reviewed_by}</div>` : ''}
+                        </div>
+                        ${task.status === 'pending' ? `
+                            <button class="btn btn-small" onclick="completeTask(${task.id})" style="margin-top: 10px;">
+                                <i class="fas fa-check"></i> Завершить задание
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Update withdrawal form
+        function updateWithdrawalForm() {
+            // Update method details
+            const methodSelect = document.getElementById('withdrawMethod');
+            const detailsLabel = document.getElementById('detailsLabel');
+            const detailsInput = document.getElementById('withdrawDetails');
+            const detailsHint = document.getElementById('detailsHint');
+            
+            methodSelect.addEventListener('change', function() {
+                updateWithdrawalMethod(this.value);
+            });
+            
+            // Initial update
+            updateWithdrawalMethod(methodSelect.value);
+            
+            // Update amount in real-time
+            const amountInput = document.getElementById('withdrawAmount');
+            amountInput.addEventListener('input', function() {
+                updateWithdrawalSummary(this.value);
+            });
+            
+            // Initial summary
+            updateWithdrawalSummary(amountInput.value || '0');
+        }
+
+        // Update withdrawal method
+        function updateWithdrawalMethod(method) {
+            const detailsLabel = document.getElementById('detailsLabel');
+            const detailsInput = document.getElementById('withdrawDetails');
+            const detailsHint = document.getElementById('detailsHint');
+            
+            const config = {
+                card: {
+                    label: 'Номер карты',
+                    placeholder: '2200 1234 5678 9012',
+                    hint: 'Введите 16-19 цифр номера карты'
+                },
+                phone: {
+                    label: 'Номер телефона',
+                    placeholder: '+79123456789',
+                    hint: 'Введите номер в международном формате'
+                },
+                qiwi: {
+                    label: 'Номер QIWI кошелька',
+                    placeholder: '+79123456789',
+                    hint: 'Введите номер телефона, привязанный к QIWI'
+                },
+                yoomoney: {
+                    label: 'Номер кошелька ЮMoney',
+                    placeholder: '4100112345678901',
+                    hint: 'Введите номер кошелька ЮMoney'
+                }
+            };
+            
+            const cfg = config[method] || config.card;
+            
+            detailsLabel.textContent = cfg.label;
+            detailsInput.placeholder = cfg.placeholder;
+            detailsHint.textContent = cfg.hint;
+        }
+
+        // Update withdrawal summary
+        function updateWithdrawalSummary(amount) {
+            const amountNum = parseFloat(amount) || 0;
+            const fee = amountNum * 0.01; // 1% fee
+            const total = amountNum - fee;
+            
+            document.getElementById('summaryAmount').textContent = amountNum.toFixed(2) + ' ₽';
+            document.getElementById('summaryFee').textContent = fee.toFixed(2) + ' ₽ (1%)';
+            document.getElementById('summaryTotal').textContent = total.toFixed(2) + ' ₽';
+        }
+
+        // Filter tasks
+        function filterTasks(category) {
+            const categories = document.querySelectorAll('.category');
+            categories.forEach(cat => cat.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // In a real app, you would filter tasks here
+            showNotification(`Показаны задания: ${category === 'all' ? 'Все' : category === 'high' ? 'Высокий доход' : category === 'quick' ? 'Быстрые' : 'Новые'}`);
+        }
+
+        // Filter my tasks
+        function filterMyTasks(filter) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // In a real app, you would filter tasks here
+            showNotification(`Показаны: ${filter === 'all' ? 'Все' : filter === 'pending' ? 'В процессе' : filter === 'completed' ? 'На проверке' : filter === 'approved' ? 'Одобрено' : 'Отклонено'}`);
+        }
+
+        // Start task
+        function startTask(taskId) {
+            tg.showPopup({
+                title: '🚀 Начало задания',
+                message: 'Для выполнения задания вернитесь в бота и используйте команду /tasks\n\nТам вы найдете подробные инструкции.',
+                buttons: [
+                    {id: 'open_bot', type: 'default', text: '📱 Открыть бота'},
+                    {id: 'cancel', type: 'cancel', text: 'Отмена'}
+                ]
+            }, (buttonId) => {
+                if (buttonId === 'open_bot') {
+                    openBot();
+                }
+            });
+        }
+
+        // View task details
+        function viewTaskDetails(taskId) {
+            const task = appData.tasks.find(t => t.id === taskId);
+            if (!task) return;
+            
+            tg.showPopup({
+                title: task.title,
+                message: `${task.description}\n\n💰 Награда: ${task.reward} ₽\n\nДля начала выполнения нажмите "Начать" в списке заданий.`,
+                buttons: [{type: 'ok'}]
+            });
+        }
+
+        // Complete task
+        function completeTask(taskId) {
+            tg.showPopup({
+                title: '✅ Завершение задания',
+                message: 'Для завершения задания и загрузки скриншота вернитесь в бота.',
+                buttons: [
+                    {id: 'open_bot', type: 'default', text: '📱 Открыть бота'},
+                    {id: 'cancel', type: 'cancel', text: 'Позже'}
+                ]
+            }, (buttonId) => {
+                if (buttonId === 'open_bot') {
+                    openBot();
+                }
+            });
+        }
+
+        // Submit withdrawal
+        function submitWithdrawal() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const method = document.getElementById('withdrawMethod').value;
+            const details = document.getElementById('withdrawDetails').value;
+            const minAmount = 100;
+            
+            if (!amount || amount < minAmount) {
+                showNotification(`Минимальная сумма ${minAmount} ₽`, 'error');
+                return;
+            }
+            
+            if (amount > userData.balance) {
+                showNotification('Недостаточно средств', 'error');
+                return;
+            }
+            
+            if (!details) {
+                showNotification('Заполните реквизиты', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('submitWithdrawBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+            btn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                showNotification('✅ Заявка на вывод отправлена!', 'success');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                
+                // Update balance
+                userData.balance -= amount;
+                updateMainScreen();
+                
+                // Add to history
+                appData.withdrawals.unshift({
+                    id: appData.withdrawals.length + 1,
+                    amount: amount,
+                    method: method,
+                    status: 'pending',
+                    date: new Date().toLocaleDateString('ru-RU')
+                });
+                
+                updateWithdrawals();
+                showSection('main');
+            }, 2000);
+        }
+
+        // Submit support ticket
+        function submitSupportTicket() {
+            const subject = document.getElementById('supportSubject').value;
+            const message = document.getElementById('supportMessage').value;
+            const category = document.getElementById('supportCategory').value;
+            
+            if (!subject || !message) {
+                showNotification('Заполните все поля', 'error');
+                return;
+            }
+            
+            // Simulate API call
+            showNotification('✅ Обращение отправлено!', 'success');
+            
+            // Add to list
+            appData.tickets.unshift({
+                id: appData.tickets.length + 1,
+                subject: subject,
+                message: message,
+                status: 'open',
+                date: new Date().toLocaleDateString('ru-RU')
+            });
+            
+            updateTickets();
+            
+            // Clear form
+            document.getElementById('supportSubject').value = '';
+            document.getElementById('supportMessage').value = '';
+        }
+
+        // Copy referral link
+        function copyRefLink() {
+            const link = document.getElementById('refLink').textContent;
+            navigator.clipboard.writeText(link)
+                .then(() => showNotification('✅ Ссылка скопирована!', 'success'))
+                .catch(() => showNotification('❌ Ошибка копирования', 'error'));
+        }
+
+        // Share referral link
+        function shareRefLink() {
+            const link = document.getElementById('refLink').textContent;
+            const text = `Присоединяйся к заработку! 🚀\n${link}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Заработок на заданиях',
+                    text: text,
+                    url: link
+                });
+            } else {
+                tg.shareMessage(text);
+            }
+        }
+
+        // Copy user ID
+        function copyUserId() {
+            navigator.clipboard.writeText(userData.id.toString())
+                .then(() => showNotification('✅ ID скопирован!', 'success'))
+                .catch(() => showNotification('❌ Ошибка копирования', 'error'));
+        }
+
+        // Open bot
+        function openBot() {
+            tg.openTelegramLink(`https://t.me/${tg.initDataUnsafe.user?.username || 'bot'}_bot`);
+        }
+
+        // Refresh data
+        function refreshData() {
+            showNotification('🔄 Данные обновляются...', 'info');
+            
+            // Simulate refresh
+            setTimeout(() => {
+                userData.balance += Math.random() * 10;
+                updateMainScreen();
+                showNotification('✅ Данные обновлены!', 'success');
+            }, 1000);
+        }
+
+        // Refresh profile
+        function refreshProfile() {
+            refreshData();
+        }
+
+        // Refresh tasks
+        function refreshTasks() {
+            showNotification('🔄 Задания обновляются...', 'info');
+            
+            // Simulate refresh
+            setTimeout(() => {
+                showEarnSection();
+                showNotification('✅ Задания обновлены!', 'success');
+            }, 1000);
+        }
+
+        // Show help
+        function showHelp() {
+            document.getElementById('helpModal').style.display = 'flex';
+        }
+
+        // Hide help
+        function hideHelp() {
+            document.getElementById('helpModal').style.display = 'none';
+        }
+
+        // Show clear history modal
+        function showClearHistoryModal() {
+            document.getElementById('clearHistoryModal').style.display = 'flex';
+        }
+
+        // Hide clear history modal
+        function hideClearHistoryModal() {
+            document.getElementById('clearHistoryModal').style.display = 'none';
+        }
+
+        // Clear history
+        function clearHistory() {
+            appData.myTasks = [];
+            appData.withdrawals = [];
+            appData.tickets = [];
+            
+            updateMainScreen();
+            showMyTasksSection();
+            updateWithdrawals();
+            updateTickets();
+            
+            hideClearHistoryModal();
+            showNotification('✅ История очищена', 'success');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
